@@ -18,41 +18,40 @@ def main():
     cap = pyshark.FileCapture(args.fileName)
 
     # Print all packet details
+    packets = []
     for packet in cap:
-
-
+        currPacket = {}
         if hasattr(packet, 'eth'):
-            size = packet.length
-            dest_mac_addr= packet.eth.dst
-            src_mac_addr = packet.eth.src
-            type = packet.eth.type
+            currPacket["size"] = packet.length
+            currPacket["dest_mac_addr"] = packet.eth.dst
+            currPacket["src_mac_addr"] = packet.eth.src
+            currPacket["type"] = packet.eth.type
         
         if hasattr(packet, "ip"):
-             Ipversion = packet.ip.version
-             headerLen = packet.ip.hdr_len
-             typeOfServie = packet.ip.dsfield
-             ipLen = packet.ip.len
-             identification = packet.ip.id
-             flags = packet.ip.flags
-             fragmentOffset = packet.ip.frag_offset
-             timeTolive = packet.ip.ttl
-             protocol = packet.ip.proto
-             checkSum = packet.ip.checksum
-             sourceIp = packet.ip.src
-             destinationIp = packet.ip.dst
+             currPacket["Ipversion"] = packet.ip.version
+             currPacket["headerLen"] = packet.ip.hdr_len
+             currPacket["typeOfServie"] = packet.ip.dsfield
+             currPacket["ipLen"] = packet.ip.len
+             currPacket["identification"] = packet.ip.id
+             currPacket["flags"] = packet.ip.flags
+             currPacket["fragmentOffset"] = packet.ip.frag_offset
+             currPacket["timeTolive"] = packet.ip.ttl
+             currPacket["protocol"] = packet.ip.proto
+             currPacket["heckSum"] = packet.ip.checksum
+             currPacket["sourceIp"] = packet.ip.src
+             currPacket["destinationIp"] = packet.ip.dst
 
              if hasattr(packet,"tcp"):
-                 tcpSrc = packet.tcp.srcport
-                 tcpDst = packet.tcp.dstport
+                 currPacket["tcpSrc"] = packet.tcp.srcport
+                 currPacket["tcpDst"] = packet.tcp.dstport
              elif hasattr(packet,"udp"):
-                udpSrc = packet.udp.srcport
-                print(udpSrc)
-                udpDst = packet.udp.srcport
+                currPacket["udpSrc"] = packet.udp.srcport
+                currPacket["udpDst"] = packet.udp.srcport
              elif hasattr(packet, "icmp"):
-                icmpSrc = packet.icmp.srcport
-                print(icmpSrc)
-                icmpDst = packet.icmp.dstport
-                print(icmpDst)
+                currPacket["icmpSrc"] = packet.icmp.srcport
+                currPacket["icmpDst"] = packet.icmp.dstport
+        packets.append(currPacket)
+        print(packets)
 
 
 
