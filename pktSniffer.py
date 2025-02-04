@@ -6,10 +6,14 @@ def main():
 
     parser.add_argument("fileName")
     parser.add_argument("-host")
-    parser.add_argument("-ip", action="store_true")
+    parser.add_argument("-ip")
     parser.add_argument("-r")
     parser.add_argument("-port")
     parser.add_argument("-c")
+    parser.add_argument("-tcp", action='store_true')
+    parser.add_argument("-udp", action='store_true')
+
+
     
 
 
@@ -43,6 +47,7 @@ def main():
 
         if hasattr(packet,"tcp"):
                  currPacket["tcpSrc"] = packet.tcp.srcport
+                 print(packet.tcp.srcport)
                  currPacket["tcpDst"] = packet.tcp.dstport
         if hasattr(packet,"udp"):
                 currPacket["udpSrc"] = packet.udp.srcport
@@ -59,12 +64,10 @@ def main():
                    if "sourceIp" in packet:
                     if (packet["sourceIp"]) == args.host:
                         if packet not in outputPackets:
-                            pass
-                            #outputPackets.append(packet)
+                            outputPackets.append(packet)
                     elif (packet["destinationIp"] == args.host):
                         if packet not in outputPackets:
-                             pass
-                            #outputPackets.append(packet)
+                            outputPackets.append(packet)
             if args.port:
                 if "tcpSrc" in packet:
                     if (packet["tcpSrc"]) == args.port:
@@ -74,7 +77,7 @@ def main():
                     elif (packet["tcpDst"] == args.port) or (packet["tcpDst"]) == args.port:
                         if packet not in outputPackets:
                             outputPackets.append(packet)
-                elif "udpSrc" in packet:
+                if "udpSrc" in packet:
                      print(packet)
                      if (packet["udpSrc"]) == args.port:
                         if packet not in outputPackets:
@@ -82,6 +85,21 @@ def main():
                      elif  (packet["udpDst"]) == args.port:
                         if packet not in outputPackets:
                             outputPackets.append(packet)
+            if args.ip:
+                 if "identification" in packet:
+                      if packet["identification"] == args.ip:
+                           if packet not in outputPackets:
+                                outputPackets.append(packet)
+            if args.tcp:
+                if "tcpSrc" in packet:
+                     if packet not in outputPackets:
+                            outputPackets.append(packet)
+            if args.udp:
+                if "udpSrc" in packet:
+                     if packet not in outputPackets:
+                            outputPackets.append(packet)
+                 
+            
 
     print(outputPackets)
 
