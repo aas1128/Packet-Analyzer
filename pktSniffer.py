@@ -4,7 +4,6 @@ import pyshark
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("fileName")
     parser.add_argument("-host")
     parser.add_argument("-ip")
     parser.add_argument("-r")
@@ -12,6 +11,8 @@ def main():
     parser.add_argument("-c")
     parser.add_argument("-tcp", action='store_true')
     parser.add_argument("-udp", action='store_true')
+    parser.add_argument("-icmp", action='store_true')
+    parser.add_argument("-net")
 
 
     
@@ -19,7 +20,7 @@ def main():
 
 
     args = parser.parse_args()
-    cap = pyshark.FileCapture(args.fileName)
+    cap = pyshark.FileCapture(args.r)
 
     # Print all packet details
     packets = []
@@ -47,7 +48,6 @@ def main():
 
         if hasattr(packet,"tcp"):
                  currPacket["tcpSrc"] = packet.tcp.srcport
-                 print(packet.tcp.srcport)
                  currPacket["tcpDst"] = packet.tcp.dstport
         if hasattr(packet,"udp"):
                 currPacket["udpSrc"] = packet.udp.srcport
@@ -56,8 +56,8 @@ def main():
                 currPacket["icmpSrc"] = packet.icmp.srcport
                 currPacket["icmpDst"] = packet.icmp.dstport
         packets.append(currPacket)
-
-       
+    print(len(packets))
+    packetCounter = 0
     outputPackets = []
     for packet in packets:
             if args.host:
@@ -71,38 +71,65 @@ def main():
             if args.port:
                 if "tcpSrc" in packet:
                     if (packet["tcpSrc"]) == args.port:
-                        print(packet)
                         if packet not in outputPackets:
                             outputPackets.append(packet)
                     elif (packet["tcpDst"] == args.port) or (packet["tcpDst"]) == args.port:
                         if packet not in outputPackets:
                             outputPackets.append(packet)
                 if "udpSrc" in packet:
-                     print(packet)
-                     if (packet["udpSrc"]) == args.port:
+                    if (packet["udpSrc"]) == args.port:
                         if packet not in outputPackets:
                             outputPackets.append(packet)
-                     elif  (packet["udpDst"]) == args.port:
+                    elif  (packet["udpDst"]) == args.port:
                         if packet not in outputPackets:
                             outputPackets.append(packet)
             if args.ip:
                  if "identification" in packet:
-                      if packet["identification"] == args.ip:
-                           if packet not in outputPackets:
+                    if packet["identification"] == args.ip:
+                        if packet not in outputPackets:
                                 outputPackets.append(packet)
             if args.tcp:
                 if "tcpSrc" in packet:
-                     if packet not in outputPackets:
+                    if packet not in outputPackets:
                             outputPackets.append(packet)
             if args.udp:
                 if "udpSrc" in packet:
-                     if packet not in outputPackets:
+                    if packet not in outputPackets:
                             outputPackets.append(packet)
+            if args.icmp:
+                 if "icmpSrc" in packet:
+                    if packet not in outputPackets:
+                            outputPackets.append(packet)
+            if args.net:
+                 temp = args.net.split(".")
+                 targetNet = ".".join(temp[:-1])
+                 if "sourceIp" in packet:
+                    temp = packet["sourceIp"].split(".")
+                    genSrc = ".".join(temp[:-1])
+                    temp = packet["destinationIp"].split(".")
+                    genDst = ".".join(temp[:-1])
+                    if targetNet == genSrc or targetNet == genDst:
+                        if packet not in outputPackets:
+                            outputPackets.append(packet)
+            if (not args.host and not args.port and not args.ip and not args.tcp and not args.udp and not args.icmp and not args.net):
+                 outputPackets.append(packet) 
                  
+    if args.c:
+        printPackets(outputPackets, args.c)
+    else:
+        printPackets(outputPackets, 0)      
+def printPackets(outputPackets,c):
+    loop = 0
+    if c != 0:
+        loop = int(c)
+    else:
+        loop = len(outputPackets)
+
+    print(loop)
+    for x in range(loop):
+         print(outputPackets[x])     
+                         
             
-
-    print(outputPackets)
-
     # print("Ethernet Header:")
     # print("Packet size: ", size)
     # print("Destination MAC address", dest_mac_addr)
