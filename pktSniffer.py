@@ -6,7 +6,7 @@ def main():
 
     parser.add_argument("fileName")
     parser.add_argument("-host")
-    parser.add_argument("ip", action="store_true")
+    parser.add_argument("-ip", action="store_true")
     parser.add_argument("-r")
     parser.add_argument("-port")
     parser.add_argument("-c")
@@ -41,20 +41,49 @@ def main():
              currPacket["sourceIp"] = packet.ip.src
              currPacket["destinationIp"] = packet.ip.dst
 
-             if hasattr(packet,"tcp"):
+        if hasattr(packet,"tcp"):
                  currPacket["tcpSrc"] = packet.tcp.srcport
                  currPacket["tcpDst"] = packet.tcp.dstport
-             elif hasattr(packet,"udp"):
+        if hasattr(packet,"udp"):
                 currPacket["udpSrc"] = packet.udp.srcport
                 currPacket["udpDst"] = packet.udp.srcport
-             elif hasattr(packet, "icmp"):
+        if hasattr(packet, "icmp"):
                 currPacket["icmpSrc"] = packet.icmp.srcport
                 currPacket["icmpDst"] = packet.icmp.dstport
         packets.append(currPacket)
-        print(packets)
 
+       
+    outputPackets = []
+    for packet in packets:
+            if args.host:
+                   if "sourceIp" in packet:
+                    if (packet["sourceIp"]) == args.host:
+                        if packet not in outputPackets:
+                            pass
+                            #outputPackets.append(packet)
+                    elif (packet["destinationIp"] == args.host):
+                        if packet not in outputPackets:
+                             pass
+                            #outputPackets.append(packet)
+            if args.port:
+                if "tcpSrc" in packet:
+                    if (packet["tcpSrc"]) == args.port:
+                        print(packet)
+                        if packet not in outputPackets:
+                            outputPackets.append(packet)
+                    elif (packet["tcpDst"] == args.port) or (packet["tcpDst"]) == args.port:
+                        if packet not in outputPackets:
+                            outputPackets.append(packet)
+                elif "udpSrc" in packet:
+                     print(packet)
+                     if (packet["udpSrc"]) == args.port:
+                        if packet not in outputPackets:
+                            outputPackets.append(packet)
+                     elif  (packet["udpDst"]) == args.port:
+                        if packet not in outputPackets:
+                            outputPackets.append(packet)
 
-
+    print(outputPackets)
 
     # print("Ethernet Header:")
     # print("Packet size: ", size)
@@ -88,7 +117,7 @@ def main():
 
 
 
-    
+
 
 
 
