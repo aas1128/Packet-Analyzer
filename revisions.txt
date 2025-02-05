@@ -1,0 +1,48 @@
+commit b6d441d3cde4b33025b5194ab021dd1ddade0b94
+Author: Aayan Sayed <aas1128@rit.edu>
+Date:   Tue Feb 4 19:51:41 2025 -0500
+
+    fixed some stuff
+
+commit 208ef38f028db0088c31eb70f429ffcba889d1bf
+Author: Aayan Sayed <aas1128@rit.edu>
+Date:   Tue Feb 4 12:27:31 2025 -0500
+
+    added readme and fixed requirements
+
+commit 126bdbe7a5ef3953df50ba011ace668fa4531993
+Author: Aayan Sayed <aas1128@rit.edu>
+Date:   Tue Feb 4 11:56:21 2025 -0500
+
+    generated a requirment file
+    '
+
+commit d24d9e88a1e6b5543dfd9dd32ccb933315d59716
+Author: Aayan Sayed <aas1128@rit.edu>
+Date:   Tue Feb 4 11:53:56 2025 -0500
+
+    finished adding all filters and page counter flag
+
+commit fbf23c3731fc42b539620a06738157b9672dc543
+Author: Aayan Sayed <aas1128@rit.edu>
+Date:   Mon Feb 3 23:19:35 2025 -0500
+
+    adding all the filters besides net
+
+commit 50ec4f9c65096eea24625c7bdcbf528dc3ee52b3
+Author: Aayan Sayed <aas1128@rit.edu>
+Date:   Mon Feb 3 22:38:47 2025 -0500
+
+    fixed the host filtering and added the port filter
+
+commit 9a20aae7ce795ed9b2c37a4ef6059c34e3891c4d
+Author: Aayan Sayed <aas1128@rit.edu>
+Date:   Mon Feb 3 16:28:52 2025 -0500
+
+    added all packets to dict
+
+commit aa8c44a0edf70ec2dfc30d2efdbe1473dfc393c3
+Author: Aayan Sayed <aas1128@rit.edu>
+Date:   Mon Feb 3 16:15:03 2025 -0500
+
+    Iterated through the packet and figured out how to access headers but haven't done filters

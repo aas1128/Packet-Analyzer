@@ -5,7 +5,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-host")
-    parser.add_argument("-ip")
+    parser.add_argument("-ip", action='store_true')
     parser.add_argument("-r")
     parser.add_argument("-port")
     parser.add_argument("-c")
@@ -16,6 +16,7 @@ def main():
 
 
     
+
 
 
 
@@ -83,10 +84,10 @@ def main():
                         if packet not in outputPackets:
                             outputPackets.append(packet)
             if args.ip:
-                 if "identification" in packet:
-                    if packet["identification"] == args.ip:
-                        if packet not in outputPackets:
-                                outputPackets.append(packet)
+                    if "ipversion" in packet:
+                        if packet["Ipversion"] == "4":
+                                if packet not in outputPackets:
+                                        outputPackets.append(packet)
             if args.tcp:
                 if "tcpSrc" in packet:
                     if packet not in outputPackets:
