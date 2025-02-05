@@ -84,10 +84,9 @@ def main():
                         if packet not in outputPackets:
                             outputPackets.append(packet)
             if args.ip:
-                    if "ipversion" in packet:
-                        if packet["Ipversion"] == "4":
-                                if packet not in outputPackets:
-                                        outputPackets.append(packet)
+                if "Ipversion" in packet:
+                    if packet["Ipversion"] == "4":
+                        outputPackets.append(packet)
             if args.tcp:
                 if "tcpSrc" in packet:
                     if packet not in outputPackets:
