@@ -53,10 +53,9 @@ def main():
                 currPacket["udpSrc"] = packet.udp.srcport
                 currPacket["udpDst"] = packet.udp.srcport
         if hasattr(packet, "icmp"):
-                currPacket["icmpSrc"] = packet.icmp.srcport
-                currPacket["icmpDst"] = packet.icmp.dstport
+                currPacket["icmpType"] = packet.icmp.type
+                currPacket["icmpCode"] = packet.icmp.code
         packets.append(currPacket)
-    print(len(packets))
     packetCounter = 0
     outputPackets = []
     for packet in packets:
@@ -97,7 +96,7 @@ def main():
                     if packet not in outputPackets:
                             outputPackets.append(packet)
             if args.icmp:
-                 if "icmpSrc" in packet:
+                 if "icmpType" in packet:
                     if packet not in outputPackets:
                             outputPackets.append(packet)
             if args.net:
@@ -124,46 +123,11 @@ def printPackets(outputPackets,c):
         loop = int(c)
     else:
         loop = len(outputPackets)
-
-    print(loop)
-    for x in range(loop):
-         print(outputPackets[x])     
-                         
+    if len(outputPackets) != 0:
+        for x in range(loop):   
+            print(outputPackets[x])
             
-    # print("Ethernet Header:")
-    # print("Packet size: ", size)
-    # print("Destination MAC address", dest_mac_addr)
-    # print("Source MAC address", src_mac_addr)
-    # print("Ethertype", type)
-
-    # print("\n\n\n\n\n")
-    # print("IP Header:")
-    # print("Version: ", Ipversion)
-    # print("Header Length: ", headerLen)
-    # print("Type of Service: ", typeOfServie)
-    # print("Total Length: ", ipLen)
-    # print("Identification: ", identification)
-    # print("Flags: ", flags)
-    # print("Fragment Offset: ", fragmentOffset)
-    # print("Time to Live: ", timeTolive)
-    # print("Protocol: ", protocol)
-    # print("Header CheckSum: ", checkSum)
-    # print("Source IP: ", sourceIp)
-    # print("Destination IP: ", destinationIp)
-    # print("\n\n\n\n\n")
-
-    # print("Encapsulated Packets:")
-    # print("TCP:")
-    # print("SRC: ", tcpSrc)
-    # print("DST: ", tcpDst)
-
-
-
-
-
-
-
-
+    
 
 
 
