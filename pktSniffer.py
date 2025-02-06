@@ -2,8 +2,19 @@ import argparse
 import pyshark 
 
 def main():
-    parser = argparse.ArgumentParser()
+    """
+     Main function that analyzes Pcap network files and print out info
+     based on provided filters.
 
+     Arguments: None
+     Returns:None 
+
+    Use Pyshark Library along with OS to read in and create a dictionary for each packet.
+    The keys are the name of the attribute and the value is the data itself.
+    All packets are stored in a list called "Packets" before being filtered and printed.
+    """
+
+    parser = argparse.ArgumentParser()
     parser.add_argument("-host")
     parser.add_argument("-ip", action='store_true')
     parser.add_argument("-r")
@@ -13,17 +24,8 @@ def main():
     parser.add_argument("-udp", action='store_true')
     parser.add_argument("-icmp", action='store_true')
     parser.add_argument("-net")
-
-
-    
-
-
-
-
     args = parser.parse_args()
-    cap = pyshark.FileCapture(args.r)
-
-    # Print all packet details
+    cap = pyshark.FileCapture(args.r)   
     packets = []
     for packet in cap:
         currPacket = {}
@@ -58,6 +60,16 @@ def main():
                 currPacket["icmpCode"] = packet.icmp.code
         packets.append(currPacket)
     packetCounter = 0
+
+    """
+   
+    """
+
+    """
+    Here all packets have been read in and organized.
+    We check and apply all command line filters and append it to another list 
+    called "output packets"
+    """
     outputPackets = []
     for packet in packets:
             if args.host:
@@ -112,12 +124,29 @@ def main():
                             outputPackets.append(packet)
             if (not args.host and not args.port and not args.ip and not args.tcp and not args.udp and not args.icmp and not args.net):
                  outputPackets.append(packet) 
-                 
+    
+    """
+    The -c or counter flag is checked after all other filters have been applied. 
+    Here I used the printPackets function too figure out how much of the output the user wants 
+    before displaying. 
+    """
     if args.c:
         printPackets(outputPackets, args.c)
     else:
-        printPackets(outputPackets, 0)      
+        printPackets(outputPackets, 0)
+
+
 def printPackets(outputPackets,c):
+    """
+    Function that takes the list of all packets needed to be displayed and prints them to 
+    stdout.
+
+    Parameters: 
+    <Dict> List outputPackets: Contains all the packets that remain after filters have been applied
+                               Each index of the array is a dictionary holding 1 packet of information
+            int Counter:       This is the argument the user passed in when using the -c flag
+                               Limists the output to C packets  
+    """
     loop = 0
     if c != 0:
         loop = int(c)
@@ -130,7 +159,8 @@ def printPackets(outputPackets,c):
     
 
 
-
-main()
+ 
+if __name__ == "__main__":
+    main()
 
 
